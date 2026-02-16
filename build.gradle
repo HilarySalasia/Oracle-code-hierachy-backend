@@ -1,0 +1,61 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.1'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.netflix.dgs.codegen' version '7.0.3'
+}
+
+group = 'com.turnquest'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-graphql'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly group: 'com.oracle.database.jdbc', name: 'ojdbc8', version: '23.3.0.0'
+	implementation group: 'com.google.cloud', name: 'google-cloud-aiplatform', version: '3.24.0'
+//	implementation 'com.vladmihalcea:hibernate-types-52:2.16.2'
+//	implementation 'org.hibernate:hibernate-core:5.6.10.Final'
+	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+	runtimeOnly 'org.postgresql:postgresql'
+	implementation 'org.json:json:20210307'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.2.0'
+	implementation 'com.oracle.database.jdbc:ojdbc8:19.8.0.0'
+
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework:spring-webflux'
+	testImplementation 'org.springframework.graphql:spring-graphql-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+generateJava {
+	schemaPaths = ["${projectDir}/src/main/resources/graphql-client"]
+	packageName = 'com.turnquest.code_hierachy.codegen'
+	generateClient = true
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
